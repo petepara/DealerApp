@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-//@ComponentScan("com.ppdev.securityapp")
+@ComponentScan("com.ppdev.securityapp")
 @EnableTransactionManagement
 @PropertySource(value = "classpath:hibernate.properties")
 @EnableJpaRepositories(basePackages = "com.ppdev.securityapp")
@@ -35,7 +35,7 @@ public class JpaConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan("com.ppdev.securityApp");
+        entityManagerFactoryBean.setPackagesToScan("com.ppdev.securityapp");
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);

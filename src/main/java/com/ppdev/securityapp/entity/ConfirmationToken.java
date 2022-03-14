@@ -1,45 +1,26 @@
 package com.ppdev.securityapp.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
+@Entity
 @Data
 @NoArgsConstructor
-@Entity
-@Table(name = "confirmation_token")
-public class ConfirmationToken {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+@DiscriminatorValue("confirm")
 
-    @Column(nullable = false)
-    private String token;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "expires_at", nullable = false)
-    private LocalDateTime expiresAt;
-    @Column(name = "confirmed_at")
-    private LocalDateTime confirmedAt;
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(nullable = false,
-            name = "user_id")
-    private User user;
-
+public class ConfirmationToken extends BaseToken{
     public ConfirmationToken(String token,
                              LocalDateTime createdAt,
                              LocalDateTime expiresAt,
-                             User user) {
-        this.token = token;
-        this.createdAt = createdAt;
-        this.expiresAt = expiresAt;
-        this.user = user;
+                             User user){
+        super(token, createdAt, expiresAt, user);
     }
+
 }

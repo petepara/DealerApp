@@ -1,6 +1,8 @@
 package com.ppdev.securityapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
@@ -13,6 +15,8 @@ import java.time.LocalDate;
 @Data
 @Entity
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Table(name = "comments")
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {

@@ -1,5 +1,6 @@
 package com.ppdev.securityapp.config;
 
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -11,6 +12,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource(value = "classpath:application.properties")
+
 public class MailConfig {
 
     @Bean
@@ -26,6 +28,7 @@ public class MailConfig {
         props.put("mail.smtp.auth", env.getProperty("spring.mail.properties.mail.smtp.auth"));
         props.put("mail.smtp.starttls.enable", env.getProperty("spring.mail.properties.mail.smtp.starttls.enable"));
         props.put("mail.debug", env.getProperty("spring.mail.properties.mail.debug"));
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         mailSender.setJavaMailProperties(props);
 
         return mailSender;

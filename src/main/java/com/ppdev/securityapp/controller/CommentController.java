@@ -1,5 +1,7 @@
 package com.ppdev.securityapp.controller;
 
+import com.ppdev.securityapp.dto.CommentDto;
+import com.ppdev.securityapp.dto.CommentReadDto;
 import com.ppdev.securityapp.entity.Comment;
 import com.ppdev.securityapp.entity.User;
 import com.ppdev.securityapp.service.CommentService;
@@ -12,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users/{userId}/comments")
@@ -24,22 +27,22 @@ public class CommentController {
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     @SneakyThrows
-    public Comment addComment(@PathVariable Long userId,
-                              @RequestBody Comment comment) {
-        return commentService.addComment(userId, comment);
+    public Long addComment(@PathVariable Long userId,
+                           @RequestBody CommentDto commentDto) {
+        return commentService.addComment(userId, commentDto);
     }
 
     @GetMapping
     @SneakyThrows
-    public List<Comment> getAllUserComments(@PathVariable Long userId) {
+    public List<CommentReadDto> getAllUserComments(@PathVariable Long userId) {
         return commentService.getUserComments(userId);
     }
 
     @GetMapping("/{commentId}")
     @SneakyThrows
-    public Comment getUserComment(@PathVariable Long userId,
-                                  @PathVariable Long commentId) {
-        return commentService.getComment(userId, commentId);
+    public CommentReadDto getUserComment(@PathVariable Long userId,
+                                         @PathVariable Long commentId) {
+        return commentService.findById(commentId);
     }
 
     @DeleteMapping("/{commentId}")
@@ -48,9 +51,11 @@ public class CommentController {
     public ResponseEntity<String> deleteComment(@PathVariable Long userId,
                                                 @PathVariable Long commentId) {
         User user = userService.getCurrentUser();
-        if (user.getID() == commentService.getComment(userId, commentId).getAuthorId()) {
-            commentService.deleteComment(userId, commentId);
+
+        if (user.getID() == userService.findUserById(userId).getID()) {
+            commentService.deleteComment(commentId);
             return new ResponseEntity<>("Comment successfully deleted", HttpStatus.OK);
+
         }
         return new ResponseEntity<>("IT IS NOT YOURS", HttpStatus.FORBIDDEN);
 
@@ -59,12 +64,12 @@ public class CommentController {
     @PutMapping("{commentId}")
     @PreAuthorize("isAuthenticated()")
     @SneakyThrows
-    public ResponseEntity<String> updateComment(@RequestBody Comment comment,
+    public ResponseEntity<String> updateComment(@RequestBody CommentDto commentDto,
                                                 @PathVariable Long userId,
                                                 @PathVariable Long commentId) {
         User user = userService.getCurrentUser();
-        if (user.getID() == commentService.getComment(userId, commentId).getAuthorId()) {
-            commentService.updateComment(comment, userId, commentId);
+        if (user.getID() == commentService.findById(commentId).getAuthorId()) {
+            commentService.updateComment(commentDto, commentId);
             return new ResponseEntity<>("Comment successfully updated", HttpStatus.OK);
         }
         return new ResponseEntity<>("It is not your comment! How dare you?!?!?!?!", HttpStatus.OK);

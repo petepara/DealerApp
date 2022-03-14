@@ -40,8 +40,9 @@ public class GameObject {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate updatedAt;
 
-    @Column(name = "game_id")
-    private Long gameId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id")
+    private Game gameId;
 
 
 }

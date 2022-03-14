@@ -5,8 +5,7 @@ import javax.mail.internet.MimeMessage;
 
 import com.ppdev.securityapp.service.EmailSender;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -14,13 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class EmailService implements EmailSender {
-    private final static Logger LOGGER = LoggerFactory
-            .getLogger(EmailService.class);
-
 
     private final JavaMailSender mailSender;
-
 
     @Override
     @Async
@@ -35,7 +31,7 @@ public class EmailService implements EmailSender {
             helper.setFrom("hello@ppdev.com");
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            LOGGER.error("failed to send email", e);
+            log.error("failed to send email", e);
             throw new IllegalStateException("failed to send email");
         }
     }
